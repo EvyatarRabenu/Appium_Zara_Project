@@ -12,7 +12,6 @@ class ZaraHomePage:
     def __init__(self , driver : web.Edge):
         self.driver = driver
 
-
     def get_home_page_element(self):
        """ Returns the home page element """
        return self.driver.find_element(By.CSS_SELECTOR,'h1>a')
@@ -21,17 +20,12 @@ class ZaraHomePage:
        """ Returns the hamburger menu button element """
        return self.driver.find_element(By.CSS_SELECTOR ,'button[data-qa-id="layout-header-toggle-menu"]')
 
-
     def get_info_from_hamburger(self):
         """ Clicks the "+ INFO" link in the hamburger menu using JavaScript """
         wait = WebDriverWait(self.driver, 10)
         info_element = wait.until(EC.presence_of_element_located((By.LINK_TEXT, "+ INFO")))
         # Use JavaScript to click the element
         self.driver.execute_script("arguments[0].click();",info_element)
-
-        # wait.until(EC.presence_of_element_located((By.LINK_TEXT, "+ INFO")))
-        # info_element = self.driver.find_element(By.LINK_TEXT , "+ INFO")
-        # return info_element
 
     def get_contact_us_element(self):
         """ Scrolls to and clicks the "CONTACT US" link under a specific category in the menu """
@@ -49,11 +43,11 @@ class ZaraHomePage:
         return phone_number
 
     def get_youtube_page_element(self):
+        """ Waits for and clicks the YouTube link element to navigate to the Zara YouTube page """
         youtube_element = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//ul[@id="homeSocialFooter"]//a[contains(@href, "youtube.com/user/zara")]'))
         )
-
         # Click the element using JavaScript to bypass obstructions
         self.driver.execute_script("arguments[0].click();", youtube_element)
 

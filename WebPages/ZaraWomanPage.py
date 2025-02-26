@@ -25,7 +25,7 @@ class ZaraWomanPage:
 
     def get_cord_name_element(self):
         """ Returns the name of the first "CO-ORD SET" product """
-        cord_name_element = self.driver.find_element(By.XPATH , '//a[h2[contains(text(), "COLLAR")]]')
+        cord_name_element = self.driver.find_element(By.XPATH , '//a[h2[contains(text(), "WAISTCOAT")]]')
         cord_name = cord_name_element.text
         return cord_name
 

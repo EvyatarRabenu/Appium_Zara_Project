@@ -23,4 +23,8 @@ appPackage='com.google.android.youtube',
 appActivity='com.google.android.youtube.app.honeycomb.Shell$HomeActivity'
 )
 
+ZARA_MESSAGE = 'Hi, can you check the status of my order? Order number: 123456'
+SEARCH_ZARA_FROM_YOUTUBE = '@zara'
+ZARA_NAME = 'Zara'
+ZARA_PHONE_NUMBER = '1599510510'
 ZARA_URL = "https://www.zara.com/il/en/"

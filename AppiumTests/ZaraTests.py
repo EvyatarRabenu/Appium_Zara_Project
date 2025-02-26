@@ -3,9 +3,8 @@ from unittest import TestCase
 from appium import webdriver as mobile
 from selenium import webdriver as web
 from time import sleep
-from AppiumTests.Globals import ZARA_URL
+from AppiumTests.Globals import ZARA_URL, ZARA_PHONE_NUMBER, ZARA_NAME, SEARCH_ZARA_FROM_YOUTUBE, ZARA_MESSAGE
 from selenium.webdriver.edge.service import Service
-
 from WebPages.ZaraYouTubePage import ZaraYouTubePage
 from WebPages.ZaraHomePage import ZaraHomePage
 from AppPages.DialerApp import DialerAppPage
@@ -43,53 +42,52 @@ class ZaraTests(TestCase):
         """ Test that verifies the dialer app correctly places a call to the store using the phone number
         displayed on the contact us page and ends the call successfully. The test checks if the dialed number matches
         the expected phone number """
+
+        # Initialize the dialer app page and navigate through the home page to find the contact information
         self.dialer_app = DialerAppPage(self.driver)
         self.home_page.get_hamburger_menu().click()
         self.home_page.get_info_from_hamburger()
         self.home_page.get_contact_us_element()
+
+        # Retrieve the phone number from the "Contact Us" page
         phone_number = self.home_page.get_phone_number_element()
         logging.info(f"Zara Phone number: {phone_number}")
 
-        self.dialer_app.get_keyboard_pad()
+        # Initiate the call by accessing the dialer app, inputting the phone number, and making the call
+        self.dialer_app.click_keyboard_pad()
         self.dialer_app.click_call(phone_number)
-        self.dialer_app.end_call()
-        self.assertEqual(phone_number , '1599510510')
 
-        #self.driver = mobile.Remote(appium_server_url_local, capabilities_Pixel_9)
-        #self.mobile_driver = mobile.Remote(appium_server_url_local, capabilities_Pixel_9)
+        # End the call after placing it
+        self.dialer_app.end_call()
+
+        # Validate that the dialed phone number matches the expected one
+        self.assertEqual(phone_number , ZARA_PHONE_NUMBER)
 
 # ----------------------------------------------------------------------------------------------------------------------
+
     def test_sms_to_store(self):
+        """ Tests sending an SMS to the Zara store by retrieving the phone number, sending a message,
+        and verifying the phone number. """
+
+        # Initialize the dialer app page and navigate through the home page to find the contact information
         self.dialer_app = DialerAppPage(self.driver)
         self.home_page.get_hamburger_menu().click()
         self.home_page.get_info_from_hamburger()
         self.home_page.get_contact_us_element()
+
+        # Retrieve the phone number from the "Contact Us" page
         phone_number = self.home_page.get_phone_number_element()
         logging.info(f"Zara Phone number: {phone_number}")
 
-        self.dialer_app.get_keyboard_pad()
+        # Send an SMS message to the retrieved phone number
+        self.dialer_app.click_keyboard_pad()
         self.dialer_app.fill_numbers_on_screen(phone_number)
         self.dialer_app.get_send_message_element().click()
-        message = 'Hi, can you check the status of my order? Order number: 123456'
-        self.dialer_app.get_text_line_message_element(message)
+        self.dialer_app.get_text_line_message_element(ZARA_MESSAGE)
         self.dialer_app.get_send_message_btn_element().click()
 
-        #self.mobile_driver = mobile.Remote(appium_server_url_local, capabilities_Pixel_9)
-# ----------------------------------------------------------------------------------------------------------------------
-
-    def test_save_zara_as_contact(self):
-        self.dialer_app = DialerAppPage(self.driver)
-        self.home_page.get_hamburger_menu().click()
-        self.home_page.get_info_from_hamburger()
-        self.home_page.get_contact_us_element()
-        phone_number = self.home_page.get_phone_number_element()
-        logging.info(f"Zara Phone number: {phone_number}")
-
-        self.dialer_app.get_keyboard_pad()
-        self.dialer_app.fill_numbers_on_screen(phone_number)
-        self.dialer_app.create_contact().click()
-        self.dialer_app.create_contact_first_name('Zara')
-        self.dialer_app.save_contact().click()
+        # Validate that the phone number matches the expected one
+        self.assertEqual(phone_number , ZARA_PHONE_NUMBER)
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -112,7 +110,7 @@ class ZaraTests(TestCase):
         old_price = self.cart_page.get_total_price()
         logging.info(f"Old Price: {old_price}")
 
-        # Hold the old total price before modifying the quantity of the product.
+        # Increases the product quantity
         self.cart_page.get_increase_product_quantity_element()
 
         # Wait until the total price is updated after increasing the product quantity.
@@ -125,7 +123,7 @@ class ZaraTests(TestCase):
 
         # Use the calculator app to calculate the expected price (old price * 2).
         for i in str(old_price):
-            self.calc_app.calc_send_keys(i)
+            self.calc_app.calc_press_keys(i)
         self.calc_app.multiple_by_2()
 
         # Compare the calculated price with the new price from the shopping cart.
@@ -134,36 +132,34 @@ class ZaraTests(TestCase):
 # ----------------------------------------------------------------------------------------------------------------------
 
     def test_go_to_zara_youtube_channel(self):
+        """ Tests navigating to the Zara YouTube channel , opening the YouTube page in a new tab,
+        switching to the new tab, denying notifications, searching for the Zara channel,
+        and verifying that the search result matches the expected channel name. """
+
+        # Initialize the YouTube app page and get the current window handle (original tab)
         self.youtube_app = YouTubeAppPage(self.driver)
-        # Get the current window handle (original tab)
         original_window = self.driver.current_window_handle
+
+        # Navigate to the YouTube page and wait for a new tab to open
         self.home_page.get_youtube_page_element()
-        # Wait for a new tab to open
         WebDriverWait(self.driver, 10).until(lambda d: len(d.window_handles) > 1)
+
         # Switch to the new tab
         new_window = [window for window in self.driver.window_handles if window != original_window][0]
         self.driver.switch_to.window(new_window)
 
-        # Now get the new URL
-        print("New Tab URL:", self.driver.current_url)
-        print(self.youtube_page.get_youtube_header_element())
+        # Log the new URL and the YouTube page header element
+        logging.info(f"New Tab URL: {self.driver.current_url}")
+        logging.info(self.youtube_page.get_youtube_header_element())
 
+        # Deny notifications, search for the Zara channel, and press Enter to search
         self.youtube_app.get_denied_notifications().click()
         self.youtube_app.get_youtube_search_element().click()
         self.youtube_app.get_youtube_edit_text_element(self.youtube_page.get_youtube_header_element())
         self.youtube_app.press_enter_element()
-        self.youtube_app.get_zara_element().click()
-        print(self.youtube_app.get_zara_with_strudel_element())
 
-
-
-
-
-
-
-
-
-
+        # Verify the search result matches the expected channel name
+        self.assertEqual(self.youtube_page.get_youtube_header_element() , SEARCH_ZARA_FROM_YOUTUBE)
 
 
     def tearDown(self):

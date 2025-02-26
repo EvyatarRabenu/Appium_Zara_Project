@@ -1,10 +1,7 @@
 from appium import webdriver as mobile
 from AppiumTests.Globals import capabilities_Pixel_7a,APP_CALC
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.webdriver.common.by import By
 from time import sleep
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 appium_server_url_local = 'http://localhost:4723/wd/hub'
 
@@ -16,7 +13,9 @@ class CalcAppPage:
         self.driver = mobile.Remote(appium_server_url_local,capabilities)
         #self.driver = driver  # השתמש במופע driver שנמסר
 
-    def calc_send_keys(self , num):
+    def calc_press_keys(self , num):
+        """ Presses the corresponding calculator key based on the given number """
+
         num_0 = self.driver.find_element(by=AppiumBy.ID, value='com.google.android.calculator:id/digit_0')
         num_1 = self.driver.find_element(by=AppiumBy.ID, value='com.google.android.calculator:id/digit_1')
         num_2 = self.driver.find_element(by=AppiumBy.ID, value='com.google.android.calculator:id/digit_2')
@@ -64,6 +63,7 @@ class CalcAppPage:
 
 
     def multiple_by_2(self):
+        """ Multiplies the current number by 2 """
         multiple = self.driver.find_element(by=AppiumBy.ID , value='com.google.android.calculator:id/op_mul')
         sleep(1)
         multiple.click()
@@ -74,6 +74,7 @@ class CalcAppPage:
 
 
     def get_result(self):
+        """ Retrieves and returns the current result displayed on the calculator """
         result_nemu = self.driver.find_element(by=AppiumBy.ID,value='com.google.android.calculator:id/result_preview')
         return result_nemu.text
 
