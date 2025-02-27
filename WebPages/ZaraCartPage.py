@@ -10,7 +10,7 @@ class ZaraCartPage:
 
     def get_increase_product_quantity_element(self):
         """ Increases the product quantity by clicking the increase button """
-        increase_button = self.driver.find_element(By.CSS_SELECTOR, ".zds-quantity-selector__increase")
+        increase_button = self.driver.find_element(By.CSS_SELECTOR, "button[data-qa-id='add-order-item-unit']")
         self.driver.execute_script("arguments[0].click();", increase_button)
 
     def get_total_price(self):

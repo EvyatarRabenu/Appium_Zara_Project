@@ -20,6 +20,7 @@ class ZaraHomePage:
        """ Returns the hamburger menu button element """
        return self.driver.find_element(By.CSS_SELECTOR ,'button[data-qa-id="layout-header-toggle-menu"]')
 
+
     def get_info_from_hamburger(self):
         """ Clicks the "+ INFO" link in the hamburger menu using JavaScript """
         wait = WebDriverWait(self.driver, 10)
