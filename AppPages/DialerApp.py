@@ -12,7 +12,7 @@ class DialerAppPage:
         """ Initialize the CallerApp on Pixel7_a with a WebDriver instance."""
         capabilities = {**capabilities_Pixel_7a, **APP_DIALER}
         self.driver = mobile.Remote(appium_server_url_local,capabilities)
-        #self.driver = driver  # השתמש במופע driver שנמסר
+
 
     def click_keyboard_pad(self):
         """ Opens the dialer keypad """

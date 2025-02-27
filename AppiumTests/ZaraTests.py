@@ -164,5 +164,4 @@ class ZaraTests(TestCase):
 
     def tearDown(self):
         """Clean up after the test."""
-        sleep(2)
         self.driver.quit()
